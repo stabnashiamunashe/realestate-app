@@ -18,9 +18,9 @@ public class TenantController {
         this.tenantService = tenantService;
     }
 
-    @PostMapping("/create")
-    public ResponseEntity<Tenant> createTenant(@RequestBody Tenant tenant) {
-        Tenant savedTenant = tenantService.createTenant(tenant);
+    @PostMapping("/register")
+    public ResponseEntity<Tenant> createTenant(@RequestBody Tenant tenant,@RequestParam VerificationMedium verificationMedium) throws Exception {
+        Tenant savedTenant = tenantService.createTenant(tenant, verificationMedium);
         return ResponseEntity.ok(savedTenant);
 
     }

@@ -1,9 +1,10 @@
 package tech.stabnashiamunashe.realestaterevamped.Services;
 
 import org.springframework.stereotype.Service;
+import tech.stabnashiamunashe.realestaterevamped.Emails.EmailService;
 import tech.stabnashiamunashe.realestaterevamped.PropertyOwner;
 import tech.stabnashiamunashe.realestaterevamped.Repos.PropertyOwnerRepository;
-import tech.stabnashiamunashe.realestaterevamped.Tenant;
+import tech.stabnashiamunashe.realestaterevamped.Security.Models.UserStatus;
 import tech.stabnashiamunashe.realestaterevamped.VerificationData;
 import tech.stabnashiamunashe.realestaterevamped.VerificationMedium;
 
@@ -18,13 +19,24 @@ public class PropertyOwnerService {
 
     private final VerificationServices verificationService;
 
-    public PropertyOwnerService(PropertyOwnerRepository propertyOwnerRepository, VerificationServices verificationService) {
+    private final EmailService emailService;
+
+    public PropertyOwnerService(PropertyOwnerRepository propertyOwnerRepository, VerificationServices verificationService, EmailService emailService) {
         this.propertyOwnerRepository = propertyOwnerRepository;
         this.verificationService = verificationService;
+        this.emailService = emailService;
     }
 
-    public PropertyOwner createPropertyOwner(PropertyOwner propertyOwner) {
-        return propertyOwnerRepository.save(propertyOwner);
+    public PropertyOwner createPropertyOwner(PropertyOwner propertyOwner, VerificationMedium verificationMedium) throws Exception {
+        if (emailService.isValidEmail(propertyOwner.getEmail())) {
+            throw new IllegalArgumentException("Invalid email address");
+        }
+
+        propertyOwner.setUserStatus(UserStatus.PENDING);
+        var savedPropertyOwner = propertyOwnerRepository.save(propertyOwner);
+        verificationService.sendVerificationCode(verificationMedium, propertyOwner.getEmail());
+        return savedPropertyOwner;
+
     }
 
     public PropertyOwner updatePropertyOwner(PropertyOwner propertyOwner) {

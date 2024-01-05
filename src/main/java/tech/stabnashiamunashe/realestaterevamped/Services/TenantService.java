@@ -1,6 +1,7 @@
 package tech.stabnashiamunashe.realestaterevamped.Services;
 
 import org.springframework.stereotype.Service;
+import tech.stabnashiamunashe.realestaterevamped.Emails.EmailService;
 import tech.stabnashiamunashe.realestaterevamped.Repos.TenantRepository;
 import tech.stabnashiamunashe.realestaterevamped.Security.Models.UserStatus;
 import tech.stabnashiamunashe.realestaterevamped.Tenant;
@@ -18,15 +19,30 @@ public class TenantService {
 
     private final VerificationServices verificationService;
 
-    public TenantService(TenantRepository tenantRepository, VerificationServices verificationService) {
+    private final EmailService emailService;
+
+    public TenantService(TenantRepository tenantRepository, VerificationServices verificationService, EmailService emailService) {
         this.tenantRepository = tenantRepository;
         this.verificationService = verificationService;
+        this.emailService = emailService;
     }
 
 
-    public Tenant createTenant(Tenant tenant) {
+    public Tenant createTenant(Tenant tenant, VerificationMedium verificationMedium) throws Exception {
+        if (emailService.isValidEmail(tenant.getEmail())) {
+            throw new IllegalArgumentException("Invalid email address");
+        }
+
         tenant.setUserStatus(UserStatus.PENDING);
-        return tenantRepository.save(tenant);
+        var savedTenant = tenantRepository.save(tenant);
+
+        switch (verificationMedium) {
+            case EMAIL -> verificationService.sendVerificationCode(verificationMedium, tenant.getEmail());
+            case PHONE_NUMBER -> verificationService.sendVerificationCode(verificationMedium, tenant.getPhoneNumber());
+        }
+
+        return savedTenant;
+
     }
 
     public Optional<Tenant> getTenantById(String id) {

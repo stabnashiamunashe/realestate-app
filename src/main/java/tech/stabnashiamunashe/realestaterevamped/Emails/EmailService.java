@@ -4,7 +4,6 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
-import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -24,10 +23,10 @@ public class EmailService {
         Pattern pattern = Pattern.compile(hitEmailPattern);
         Matcher matcher = pattern.matcher(email);
 
-        return matcher.matches();
+        return !matcher.matches();
     }
 
-    public boolean sendVerificationCode(String email, int verificationCode) {
+    public boolean sendEmailVerificationCode(String email, int verificationCode) {
 
         SimpleMailMessage message= new SimpleMailMessage();
         message.setTo(email);
@@ -37,11 +36,5 @@ public class EmailService {
         javaMailSender.send(message);
 
         return true;
-    }
-
-    public int generateVerificationCode(){
-        // Generate a random 6-digit verification code
-        Random rand = new Random();
-        return rand.nextInt(999999);
     }
 }

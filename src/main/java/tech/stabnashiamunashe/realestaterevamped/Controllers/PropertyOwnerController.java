@@ -19,9 +19,9 @@ public class PropertyOwnerController {
         this.propertyOwnerService = propertyOwnerService;
     }
 
-    @PostMapping("/create")
-    public ResponseEntity<PropertyOwner> createPropertyOwner(@RequestBody PropertyOwner propertyOwner) {
-        PropertyOwner savedPropertyOwner = propertyOwnerService.createPropertyOwner(propertyOwner);
+    @PostMapping("/register")
+    public ResponseEntity<PropertyOwner> createPropertyOwner(@RequestBody PropertyOwner propertyOwner,@RequestParam VerificationMedium verificationMedium) throws Exception {
+        PropertyOwner savedPropertyOwner = propertyOwnerService.createPropertyOwner(propertyOwner, verificationMedium);
         return ResponseEntity.ok(savedPropertyOwner);
 
     }
