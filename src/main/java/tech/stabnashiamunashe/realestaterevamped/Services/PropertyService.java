@@ -3,11 +3,11 @@ package tech.stabnashiamunashe.realestaterevamped.Services;
 import jakarta.annotation.Nullable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-import tech.stabnashiamunashe.realestaterevamped.City;
+import tech.stabnashiamunashe.realestaterevamped.Models.City;
 import tech.stabnashiamunashe.realestaterevamped.DTOs.PropertyDTO;
-import tech.stabnashiamunashe.realestaterevamped.Density;
-import tech.stabnashiamunashe.realestaterevamped.Property;
-import tech.stabnashiamunashe.realestaterevamped.PropertyType;
+import tech.stabnashiamunashe.realestaterevamped.Models.Density;
+import tech.stabnashiamunashe.realestaterevamped.Models.Property;
+import tech.stabnashiamunashe.realestaterevamped.Models.PropertyType;
 import tech.stabnashiamunashe.realestaterevamped.Repos.PropertyRepository;
 
 import java.util.List;
@@ -40,6 +40,22 @@ public class PropertyService {
 
         return new PropertyDTO(savedProperty);
 
+    }
+
+    public void addPropertyOwnershipDocuments(String propertyId, List<MultipartFile> documents) {
+        Optional<Property> propertyOptional = propertyRepository.findById(propertyId);
+
+        if (propertyOptional.isPresent()) {
+            Property property = propertyOptional.get();
+            List<String> documentUrls = documents.stream()
+                    .map(s3Service::uploadFile)
+                    .toList();
+
+            property.setOwnershipDocumentsUrls(documentUrls);
+
+            propertyRepository.save(property);
+
+        }
     }
 
     public Optional<Property> getProperty(String propertyId) {

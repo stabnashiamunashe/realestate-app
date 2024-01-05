@@ -1,4 +1,4 @@
-package tech.stabnashiamunashe.realestaterevamped;
+package tech.stabnashiamunashe.realestaterevamped.Models;
 
 import jakarta.persistence.Embeddable;
 import lombok.AllArgsConstructor;

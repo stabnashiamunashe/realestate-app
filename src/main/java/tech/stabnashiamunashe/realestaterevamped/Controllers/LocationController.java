@@ -2,7 +2,7 @@ package tech.stabnashiamunashe.realestaterevamped.Controllers;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import tech.stabnashiamunashe.realestaterevamped.Location;
+import tech.stabnashiamunashe.realestaterevamped.Models.Location;
 import tech.stabnashiamunashe.realestaterevamped.Services.LocationService;
 
 import java.util.List;

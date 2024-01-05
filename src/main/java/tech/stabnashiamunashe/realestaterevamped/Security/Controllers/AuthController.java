@@ -1,5 +1,6 @@
 package tech.stabnashiamunashe.realestaterevamped.Security.Controllers;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 import tech.stabnashiamunashe.realestaterevamped.Security.Service.TokenService;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -8,25 +9,21 @@ import org.springframework.security.core.Authentication;
 import tech.stabnashiamunashe.realestaterevamped.Services.PropertyOwnerService;
 import tech.stabnashiamunashe.realestaterevamped.Services.TenantService;
 
+import java.util.Arrays;
+
 
 @RestController
 @RequestMapping("/api/v1/auth")
+@Slf4j
 public class AuthController {
 
     private final TokenService tokenService;
 
     private final AuthenticationManager authenticationManager;
 
-    private final TenantService tenantsServices;
-
-    private final PropertyOwnerService propertyOwnerServices;
-
-
-    public AuthController(TokenService tokenService, AuthenticationManager authenticationManager, TenantService tenantsServices, PropertyOwnerService propertyOwnerServices) {
+    public AuthController(TokenService tokenService, AuthenticationManager authenticationManager) {
         this.tokenService = tokenService;
         this.authenticationManager = authenticationManager;
-        this.tenantsServices = tenantsServices;
-        this.propertyOwnerServices = propertyOwnerServices;
     }
 
 //    @PostMapping("/register/email/owner")
@@ -68,12 +65,15 @@ public class AuthController {
 
         try {
 
+            System.out.println(loginRequest.email() + " " + loginRequest.password());
             Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.email(), loginRequest.password()));
             System.out.println(authentication.getAuthorities());
             return "token : " + tokenService.generateToken(authentication) + "\n role : " + authentication.getAuthorities();
 
         }
         catch (Exception e){
+            // log the error
+            log.info(Arrays.toString(e.getStackTrace()));
             System.out.println(e.getMessage());
             return "User Not Found";
         }

@@ -1,12 +1,14 @@
 package tech.stabnashiamunashe.realestaterevamped.Services;
 
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import tech.stabnashiamunashe.realestaterevamped.Emails.EmailService;
 import tech.stabnashiamunashe.realestaterevamped.Repos.TenantRepository;
+import tech.stabnashiamunashe.realestaterevamped.Security.Models.UserRoles;
 import tech.stabnashiamunashe.realestaterevamped.Security.Models.UserStatus;
-import tech.stabnashiamunashe.realestaterevamped.Tenant;
-import tech.stabnashiamunashe.realestaterevamped.VerificationData;
-import tech.stabnashiamunashe.realestaterevamped.VerificationMedium;
+import tech.stabnashiamunashe.realestaterevamped.Models.Tenant;
+import tech.stabnashiamunashe.realestaterevamped.Models.VerificationData;
+import tech.stabnashiamunashe.realestaterevamped.Models.VerificationMedium;
 
 import java.util.List;
 import java.util.Optional;
@@ -21,10 +23,13 @@ public class TenantService {
 
     private final EmailService emailService;
 
-    public TenantService(TenantRepository tenantRepository, VerificationServices verificationService, EmailService emailService) {
+    private final PasswordEncoder passwordEncoder;
+
+    public TenantService(TenantRepository tenantRepository, VerificationServices verificationService, EmailService emailService, PasswordEncoder passwordEncoder) {
         this.tenantRepository = tenantRepository;
         this.verificationService = verificationService;
         this.emailService = emailService;
+        this.passwordEncoder = passwordEncoder;
     }
 
 
@@ -33,7 +38,13 @@ public class TenantService {
             throw new IllegalArgumentException("Invalid email address");
         }
 
+        if (tenantRepository.existsByEmail(tenant.getEmail())) {
+            throw new IllegalArgumentException("Email already exists");
+        }
+
         tenant.setUserStatus(UserStatus.PENDING);
+        tenant.setUserRoles(List.of(UserRoles.TENANT));
+        tenant.setPassword(passwordEncoder.encode(tenant.getPassword()));
         var savedTenant = tenantRepository.save(tenant);
 
         switch (verificationMedium) {

@@ -5,7 +5,7 @@ import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
-import tech.stabnashiamunashe.realestaterevamped.*;
+import tech.stabnashiamunashe.realestaterevamped.Models.*;
 
 import java.time.LocalDateTime;
 import java.util.List;

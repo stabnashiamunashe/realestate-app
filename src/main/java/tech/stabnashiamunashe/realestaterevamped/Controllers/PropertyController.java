@@ -5,11 +5,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import tech.stabnashiamunashe.realestaterevamped.City;
+import tech.stabnashiamunashe.realestaterevamped.Models.City;
 import tech.stabnashiamunashe.realestaterevamped.DTOs.PropertyDTO;
-import tech.stabnashiamunashe.realestaterevamped.Density;
-import tech.stabnashiamunashe.realestaterevamped.Property;
-import tech.stabnashiamunashe.realestaterevamped.PropertyType;
+import tech.stabnashiamunashe.realestaterevamped.Models.Density;
+import tech.stabnashiamunashe.realestaterevamped.Models.Property;
+import tech.stabnashiamunashe.realestaterevamped.Models.PropertyType;
 import tech.stabnashiamunashe.realestaterevamped.Services.PropertyService;
 
 import java.util.List;
@@ -32,6 +32,15 @@ public class PropertyController {
     ) {
         PropertyDTO savedProperty = propertyService.saveProperty(property, images);
         return new ResponseEntity<>(savedProperty, HttpStatus.CREATED);
+    }
+
+    @PostMapping("/{propertyId}/ownership-documents")
+    public ResponseEntity<PropertyDTO> addOwnershipDocuments(
+            @PathVariable String propertyId,
+            @RequestParam("documents") List<MultipartFile> documents
+    ) {
+        propertyService.addPropertyOwnershipDocuments(propertyId, documents);
+        return ResponseEntity.ok().build();
     }
 
     @GetMapping("/search")

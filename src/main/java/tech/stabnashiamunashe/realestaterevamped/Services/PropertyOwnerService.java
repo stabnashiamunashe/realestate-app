@@ -1,12 +1,14 @@
 package tech.stabnashiamunashe.realestaterevamped.Services;
 
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import tech.stabnashiamunashe.realestaterevamped.Emails.EmailService;
-import tech.stabnashiamunashe.realestaterevamped.PropertyOwner;
+import tech.stabnashiamunashe.realestaterevamped.Models.PropertyOwner;
 import tech.stabnashiamunashe.realestaterevamped.Repos.PropertyOwnerRepository;
+import tech.stabnashiamunashe.realestaterevamped.Security.Models.UserRoles;
 import tech.stabnashiamunashe.realestaterevamped.Security.Models.UserStatus;
-import tech.stabnashiamunashe.realestaterevamped.VerificationData;
-import tech.stabnashiamunashe.realestaterevamped.VerificationMedium;
+import tech.stabnashiamunashe.realestaterevamped.Models.VerificationData;
+import tech.stabnashiamunashe.realestaterevamped.Models.VerificationMedium;
 
 import java.util.List;
 import java.util.Optional;
@@ -21,10 +23,13 @@ public class PropertyOwnerService {
 
     private final EmailService emailService;
 
-    public PropertyOwnerService(PropertyOwnerRepository propertyOwnerRepository, VerificationServices verificationService, EmailService emailService) {
+    private final PasswordEncoder passwordEncoder;
+
+    public PropertyOwnerService(PropertyOwnerRepository propertyOwnerRepository, VerificationServices verificationService, EmailService emailService, PasswordEncoder passwordEncoder) {
         this.propertyOwnerRepository = propertyOwnerRepository;
         this.verificationService = verificationService;
         this.emailService = emailService;
+        this.passwordEncoder = passwordEncoder;
     }
 
     public PropertyOwner createPropertyOwner(PropertyOwner propertyOwner, VerificationMedium verificationMedium) throws Exception {
@@ -32,7 +37,13 @@ public class PropertyOwnerService {
             throw new IllegalArgumentException("Invalid email address");
         }
 
+        if (propertyOwnerRepository.existsByEmail(propertyOwner.getEmail())) {
+            throw new IllegalArgumentException("Email already exists");
+        }
+
         propertyOwner.setUserStatus(UserStatus.PENDING);
+        propertyOwner.setUserRoles(List.of(UserRoles.LANDLORD));
+        propertyOwner.setPassword(passwordEncoder.encode(propertyOwner.getPassword()));
         var savedPropertyOwner = propertyOwnerRepository.save(propertyOwner);
         verificationService.sendVerificationCode(verificationMedium, propertyOwner.getEmail());
         return savedPropertyOwner;

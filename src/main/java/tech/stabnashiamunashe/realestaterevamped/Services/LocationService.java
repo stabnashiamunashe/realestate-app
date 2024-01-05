@@ -2,8 +2,8 @@ package tech.stabnashiamunashe.realestaterevamped.Services;
 
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
-import tech.stabnashiamunashe.realestaterevamped.City;
-import tech.stabnashiamunashe.realestaterevamped.Location;
+import tech.stabnashiamunashe.realestaterevamped.Models.City;
+import tech.stabnashiamunashe.realestaterevamped.Models.Location;
 import tech.stabnashiamunashe.realestaterevamped.Repos.CityRepository;
 import tech.stabnashiamunashe.realestaterevamped.Repos.LocationRepository;
 

@@ -3,8 +3,8 @@ package tech.stabnashiamunashe.realestaterevamped.Controllers;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import tech.stabnashiamunashe.realestaterevamped.Services.TenantService;
-import tech.stabnashiamunashe.realestaterevamped.Tenant;
-import tech.stabnashiamunashe.realestaterevamped.VerificationMedium;
+import tech.stabnashiamunashe.realestaterevamped.Models.Tenant;
+import tech.stabnashiamunashe.realestaterevamped.Models.VerificationMedium;
 
 import java.util.List;
 

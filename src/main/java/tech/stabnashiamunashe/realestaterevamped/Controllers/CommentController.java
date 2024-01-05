@@ -2,7 +2,7 @@ package tech.stabnashiamunashe.realestaterevamped.Controllers;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import tech.stabnashiamunashe.realestaterevamped.Comment;
+import tech.stabnashiamunashe.realestaterevamped.Models.Comment;
 import tech.stabnashiamunashe.realestaterevamped.Services.CommentService;
 
 import java.util.List;

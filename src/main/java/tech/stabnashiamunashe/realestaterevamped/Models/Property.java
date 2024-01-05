@@ -1,4 +1,4 @@
-package tech.stabnashiamunashe.realestaterevamped;
+package tech.stabnashiamunashe.realestaterevamped.Models;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;

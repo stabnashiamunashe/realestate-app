@@ -1,12 +1,11 @@
 package tech.stabnashiamunashe.realestaterevamped.Services;
 
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.stereotype.Service;
 import tech.stabnashiamunashe.realestaterevamped.Emails.EmailService;
 import tech.stabnashiamunashe.realestaterevamped.Repos.VerificationDataRepository;
 import tech.stabnashiamunashe.realestaterevamped.SMS.TwilioService;
-import tech.stabnashiamunashe.realestaterevamped.VerificationData;
-import tech.stabnashiamunashe.realestaterevamped.VerificationMedium;
+import tech.stabnashiamunashe.realestaterevamped.Models.VerificationData;
+import tech.stabnashiamunashe.realestaterevamped.Models.VerificationMedium;
 
 import java.util.Random;
 

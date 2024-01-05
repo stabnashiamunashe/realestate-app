@@ -1,7 +1,8 @@
-package tech.stabnashiamunashe.realestaterevamped;
+package tech.stabnashiamunashe.realestaterevamped.Models;
 
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.Id;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,12 +13,17 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Document(collection = "verification_data")
-public class VerificationData {
+@Document(collection = "location")
+public class Location {
 
+    @Id
     private String id;
-    private String verificationCode;
+
+    private City city;
+
+    private String name;
+
     @Enumerated(EnumType.STRING)
-    private VerificationMedium verificationMedium;
-    private String userId;
+    private Density density;
+
 }

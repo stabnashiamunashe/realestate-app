@@ -2,11 +2,10 @@ package tech.stabnashiamunashe.realestaterevamped.Controllers;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import tech.stabnashiamunashe.realestaterevamped.City;
+import tech.stabnashiamunashe.realestaterevamped.Models.City;
 import tech.stabnashiamunashe.realestaterevamped.Services.CityService;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/cities")

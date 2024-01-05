@@ -2,9 +2,9 @@ package tech.stabnashiamunashe.realestaterevamped.Controllers;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import tech.stabnashiamunashe.realestaterevamped.PropertyOwner;
+import tech.stabnashiamunashe.realestaterevamped.Models.PropertyOwner;
 import tech.stabnashiamunashe.realestaterevamped.Services.PropertyOwnerService;
-import tech.stabnashiamunashe.realestaterevamped.VerificationMedium;
+import tech.stabnashiamunashe.realestaterevamped.Models.VerificationMedium;
 
 import java.security.Principal;
 import java.util.List;

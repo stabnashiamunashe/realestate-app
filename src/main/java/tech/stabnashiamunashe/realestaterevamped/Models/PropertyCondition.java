@@ -1,4 +1,4 @@
-package tech.stabnashiamunashe.realestaterevamped;
+package tech.stabnashiamunashe.realestaterevamped.Models;
 
 public enum PropertyCondition {
 

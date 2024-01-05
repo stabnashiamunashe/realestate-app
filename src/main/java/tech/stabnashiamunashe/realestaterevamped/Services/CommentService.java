@@ -1,7 +1,7 @@
 package tech.stabnashiamunashe.realestaterevamped.Services;
 
 import org.springframework.stereotype.Service;
-import tech.stabnashiamunashe.realestaterevamped.Comment;
+import tech.stabnashiamunashe.realestaterevamped.Models.Comment;
 import tech.stabnashiamunashe.realestaterevamped.Repos.CommentsRepository;
 
 import java.util.List;

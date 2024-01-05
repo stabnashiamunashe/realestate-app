@@ -2,10 +2,10 @@ package tech.stabnashiamunashe.realestaterevamped.Repos;
 
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
-import tech.stabnashiamunashe.realestaterevamped.City;
-import tech.stabnashiamunashe.realestaterevamped.Density;
-import tech.stabnashiamunashe.realestaterevamped.Property;
-import tech.stabnashiamunashe.realestaterevamped.PropertyType;
+import tech.stabnashiamunashe.realestaterevamped.Models.City;
+import tech.stabnashiamunashe.realestaterevamped.Models.Density;
+import tech.stabnashiamunashe.realestaterevamped.Models.Property;
+import tech.stabnashiamunashe.realestaterevamped.Models.PropertyType;
 
 import java.util.List;
 

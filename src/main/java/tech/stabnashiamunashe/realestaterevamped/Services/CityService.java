@@ -1,7 +1,7 @@
 package tech.stabnashiamunashe.realestaterevamped.Services;
 
 import org.springframework.stereotype.Service;
-import tech.stabnashiamunashe.realestaterevamped.City;
+import tech.stabnashiamunashe.realestaterevamped.Models.City;
 import tech.stabnashiamunashe.realestaterevamped.Repos.CityRepository;
 
 import java.util.List;
