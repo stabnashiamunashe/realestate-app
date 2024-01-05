@@ -26,7 +26,7 @@ public class PropertyService {
     }
 
 
-    public Property saveProperty(Property property,@Nullable List<MultipartFile> images) {
+    public PropertyDTO saveProperty(Property property,@Nullable List<MultipartFile> images) {
 
         if(images != null) {
             List<String> imageUrls = images.stream()
@@ -36,7 +36,10 @@ public class PropertyService {
             property.setImageUrls(imageUrls);
         }
 
-        return propertyRepository.save(property);
+        var savedProperty = propertyRepository.save(property);
+
+        return new PropertyDTO(savedProperty);
+
     }
 
     public Optional<Property> getProperty(String propertyId) {
@@ -67,7 +70,11 @@ public class PropertyService {
     }
 
 
-    public List<Property> getPropertiesByIds(List<String> propertyIds) {
-        return propertyRepository.findAllById(propertyIds);
+    public List<PropertyDTO> getPropertiesByIds(List<String> propertyIds) {
+        var properties = propertyRepository.findAllById(propertyIds);
+
+        return properties.stream()
+                .map(PropertyDTO::new)
+                .toList();
     }
 }

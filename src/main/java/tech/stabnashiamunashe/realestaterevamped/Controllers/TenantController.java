@@ -4,6 +4,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import tech.stabnashiamunashe.realestaterevamped.Services.TenantService;
 import tech.stabnashiamunashe.realestaterevamped.Tenant;
+import tech.stabnashiamunashe.realestaterevamped.VerificationMedium;
 
 import java.util.List;
 
@@ -21,6 +22,12 @@ public class TenantController {
     public ResponseEntity<Tenant> createTenant(@RequestBody Tenant tenant) {
         Tenant savedTenant = tenantService.createTenant(tenant);
         return ResponseEntity.ok(savedTenant);
+
+    }
+
+    @PostMapping("/verify")
+    public ResponseEntity<Boolean> verifyTenant(@RequestParam String identifier, VerificationMedium verificationMedium , String verificationCode) {
+        return ResponseEntity.ok(tenantService.verifyTenant(identifier, verificationMedium, verificationCode));
 
     }
 

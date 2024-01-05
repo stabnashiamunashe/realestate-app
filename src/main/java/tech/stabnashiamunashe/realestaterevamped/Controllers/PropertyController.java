@@ -26,11 +26,11 @@ public class PropertyController {
     }
 
     @PostMapping
-    public ResponseEntity<Property> createProperty(
+    public ResponseEntity<PropertyDTO> createProperty(
             @RequestParam("property") Property property,
             @RequestParam("images") @Nullable List<MultipartFile> images
     ) {
-        Property savedProperty = propertyService.saveProperty(property, images);
+        PropertyDTO savedProperty = propertyService.saveProperty(property, images);
         return new ResponseEntity<>(savedProperty, HttpStatus.CREATED);
     }
 
@@ -58,14 +58,16 @@ public class PropertyController {
     }
 
     @GetMapping("/{propertyId}")
-    public ResponseEntity<Property> getPropertyById(@PathVariable String propertyId) {
+    public ResponseEntity<PropertyDTO> getPropertyById(@PathVariable String propertyId) {
         Optional<Property> property = propertyService.getProperty(propertyId);
-        return property.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+
+        return property.map(value -> new ResponseEntity<>(new PropertyDTO(value), HttpStatus.OK))
+                .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
     @GetMapping("/ids")
-    public ResponseEntity<List<Property>> getPropertiesByIds(@RequestParam List<String> propertyIds) {
-        List<Property> properties = propertyService.getPropertiesByIds(propertyIds);
+    public ResponseEntity<List<PropertyDTO>> getPropertiesByIds(@RequestParam List<String> propertyIds) {
+        List<PropertyDTO> properties = propertyService.getPropertiesByIds(propertyIds);
         return ResponseEntity.ok(properties);
     }
 

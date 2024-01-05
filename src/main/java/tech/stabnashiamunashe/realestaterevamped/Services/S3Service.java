@@ -1,6 +1,7 @@
 package tech.stabnashiamunashe.realestaterevamped.Services;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.services.s3.S3Client;
@@ -12,6 +13,7 @@ import java.nio.file.StandardCopyOption;
 import java.util.*;
 
 @Slf4j
+@Service
 public class S3Service {
 
     private final S3Properties s3Properties;
