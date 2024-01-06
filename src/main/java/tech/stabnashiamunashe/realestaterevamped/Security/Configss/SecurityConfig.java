@@ -68,16 +68,7 @@ public class SecurityConfig {
                     .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .authorizeHttpRequests(
                         auth-> auth
-                                  .requestMatchers("/**").permitAll()
-//                                .requestMatchers("/api/v1/auth/**").permitAll()
-//                                .requestMatchers("/api/v1/properties/**").permitAll()
-//                                .requestMatchers("/api/v1/comments/**").permitAll()
-//                                .requestMatchers("/api/v1/coordinates/**").permitAll()
-//                                .requestMatchers("/api/v1/images/**").permitAll()
-//                                .requestMatchers("/api/v1/location/**").permitAll()
-//                                .requestMatchers("/api/v1/property_owners/**").permitAll()
-//                                .requestMatchers("/api/v1/tenants/**").permitAll()
-//                                .requestMatchers("/api/v1/deeds/**").permitAll()
+                                .requestMatchers("/api/v1/auth/**").permitAll()
                                 .anyRequest().authenticated()
                 ).userDetailsService(myUserDetailsService)
                     .oauth2ResourceServer((oauth2) -> oauth2
