@@ -1,11 +1,11 @@
 package tech.stabnashiamunashe.realestaterevamped.Security.Service;
 
 import tech.stabnashiamunashe.realestaterevamped.Security.Models.SecurityUser;
-import tech.stabnashiamunashe.realestaterevamped.Security.Repositories.UserRepository;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import tech.stabnashiamunashe.realestaterevamped.Security.Repositories.UserRepository;
 
 @Service
 public class MyUserDetailsService implements UserDetailsService {
@@ -18,9 +18,6 @@ public class MyUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-
-        System.out.println("Email: " + email);
-
         return userRepository
                 .findByEmail(email)
                 .map(SecurityUser::new)

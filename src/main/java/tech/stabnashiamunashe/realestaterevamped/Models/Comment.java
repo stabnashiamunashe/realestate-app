@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.data.annotation.TypeAlias;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 import tech.stabnashiamunashe.realestaterevamped.Security.Models.User;
@@ -14,6 +15,7 @@ import tech.stabnashiamunashe.realestaterevamped.Security.Models.User;
 @AllArgsConstructor
 @NoArgsConstructor
 @Document(collection = "comments")
+@TypeAlias("Comment")
 public class Comment {
 
     @Id
