@@ -44,10 +44,17 @@ public class PropertyOwnerService {
         propertyOwner.setUserStatus(UserStatus.PENDING);
         propertyOwner.setUserRoles(List.of(UserRoles.LANDLORD));
         propertyOwner.setPassword(passwordEncoder.encode(propertyOwner.getPassword()));
-        var savedPropertyOwner = propertyOwnerRepository.save(propertyOwner);
-        verificationService.sendVerificationCode(verificationMedium, propertyOwner.getEmail());
-        return savedPropertyOwner;
 
+        var savedPropertyOwner = propertyOwnerRepository.save(propertyOwner);
+
+        var verificationData = switch (verificationMedium) {
+            case EMAIL -> verificationService.sendVerificationCode(verificationMedium, propertyOwner.getEmail());
+            case PHONE_NUMBER -> verificationService.sendVerificationCode(verificationMedium, propertyOwner.getPhoneNumber());
+        };
+
+        verificationData.setUserId(savedPropertyOwner.getId());
+        verificationService.saveVerificationData(verificationData);
+        return savedPropertyOwner;
     }
 
     public PropertyOwner updatePropertyOwner(PropertyOwner propertyOwner) {

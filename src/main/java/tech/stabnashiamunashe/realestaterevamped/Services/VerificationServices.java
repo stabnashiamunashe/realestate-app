@@ -43,17 +43,24 @@ public class VerificationServices {
         verificationDataRepository.deleteById(id);
     }
 
-    private int generateVerificationCode(){
+    private String generateVerificationCode(){
         Random rand = new Random();
-        return rand.nextInt(999999);
+        return String.format("%04d", rand.nextInt(999999));
     }
 
-    public boolean sendVerificationCode(VerificationMedium verificationMedium, String identifier) throws Exception {
-        int verificationCode = generateVerificationCode();
-        return switch (verificationMedium) {
+    public VerificationData sendVerificationCode(VerificationMedium verificationMedium, String identifier) {
+        String verificationCode = generateVerificationCode();
+        switch (verificationMedium) {
             case EMAIL -> emailService.sendEmailVerificationCode(identifier, verificationCode);
             case PHONE_NUMBER -> twilioService.sendSmsVerificationCode(identifier, verificationCode);
-            default -> false;
-        };
+            default -> {
+            }
+        }
+
+        VerificationData verificationData = new VerificationData();
+        verificationData.setVerificationCode(verificationCode);
+        verificationData.setVerificationMedium(verificationMedium);
+
+        return verificationData;
     }
 }

@@ -1,5 +1,6 @@
 package tech.stabnashiamunashe.realestaterevamped.Emails;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
@@ -8,6 +9,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @Service
+@Slf4j
 public class EmailService {
 
     private final JavaMailSender javaMailSender;
@@ -26,15 +28,16 @@ public class EmailService {
         return !matcher.matches();
     }
 
-    public boolean sendEmailVerificationCode(String email, int verificationCode) {
+    public void sendEmailVerificationCode(String email, String verificationCode) {
+        try {
+            SimpleMailMessage message = new SimpleMailMessage();
+            message.setTo(email);
+            message.setSubject("Email Verification");
+            message.setText("Your verification code is " + verificationCode);
+            javaMailSender.send(message);
+        } catch (Exception e) {
+            log.error("Error sending email verification code: {}", e.getMessage());
+        }
 
-        SimpleMailMessage message= new SimpleMailMessage();
-        message.setTo(email);
-        message.setSubject("Verification Code");
-        message.setText("Your verification code is: " + verificationCode);
-
-        javaMailSender.send(message);
-
-        return true;
     }
 }

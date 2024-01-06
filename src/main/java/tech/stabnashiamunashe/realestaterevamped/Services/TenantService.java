@@ -47,11 +47,13 @@ public class TenantService {
         tenant.setPassword(passwordEncoder.encode(tenant.getPassword()));
         var savedTenant = tenantRepository.save(tenant);
 
-        switch (verificationMedium) {
+        var verificationData = switch (verificationMedium) {
             case EMAIL -> verificationService.sendVerificationCode(verificationMedium, tenant.getEmail());
             case PHONE_NUMBER -> verificationService.sendVerificationCode(verificationMedium, tenant.getPhoneNumber());
-        }
+        };
 
+        verificationData.setUserId(savedTenant.getId());
+        verificationService.saveVerificationData(verificationData);
         return savedTenant;
 
     }
