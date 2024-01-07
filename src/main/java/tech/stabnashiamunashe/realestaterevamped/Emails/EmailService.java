@@ -25,7 +25,7 @@ public class EmailService {
         Pattern pattern = Pattern.compile(hitEmailPattern);
         Matcher matcher = pattern.matcher(email);
 
-        return !matcher.matches();
+        return matcher.matches();
     }
 
     public void sendEmailVerificationCode(String email, String verificationCode) {

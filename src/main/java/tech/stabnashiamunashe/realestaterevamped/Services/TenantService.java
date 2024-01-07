@@ -1,5 +1,6 @@
 package tech.stabnashiamunashe.realestaterevamped.Services;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import tech.stabnashiamunashe.realestaterevamped.Emails.EmailService;
@@ -10,6 +11,7 @@ import tech.stabnashiamunashe.realestaterevamped.Models.Tenant;
 import tech.stabnashiamunashe.realestaterevamped.Models.VerificationData;
 import tech.stabnashiamunashe.realestaterevamped.Models.VerificationMedium;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
@@ -33,17 +35,18 @@ public class TenantService {
     }
 
 
-    public Tenant createTenant(Tenant tenant, VerificationMedium verificationMedium) throws Exception {
-        if (emailService.isValidEmail(tenant.getEmail())) {
-            throw new IllegalArgumentException("Invalid email address");
+    public ResponseEntity<?> createTenant(Tenant tenant, VerificationMedium verificationMedium) {
+        if (!emailService.isValidEmail(tenant.getEmail())) {
+            return ResponseEntity.badRequest().body("Invalid email address");
         }
 
         if (tenantRepository.existsByEmail(tenant.getEmail())) {
-            throw new IllegalArgumentException("Email already exists");
+            return ResponseEntity.badRequest().body("Email already exists");
         }
 
         tenant.setUserStatus(UserStatus.PENDING);
         tenant.setUserRoles(List.of(UserRoles.TENANT));
+        tenant.setDateCreated(LocalDateTime.now());
         tenant.setPassword(passwordEncoder.encode(tenant.getPassword()));
         var savedTenant = tenantRepository.save(tenant);
 
@@ -54,7 +57,8 @@ public class TenantService {
 
         verificationData.setUserId(savedTenant.getId());
         verificationService.saveVerificationData(verificationData);
-        return savedTenant;
+
+        return ResponseEntity.ok(savedTenant);
 
     }
 
@@ -65,6 +69,7 @@ public class TenantService {
     public Tenant updateTenant(Tenant tenant) {
         Tenant existingTenant = tenantRepository.findById(tenant.getId()).orElse(null);
         assert existingTenant != null;
+        existingTenant.setDateUpdated(LocalDateTime.now());
         existingTenant.setFirstName(tenant.getFirstName());
         return tenantRepository.save(existingTenant);
     }
@@ -95,7 +100,6 @@ public class TenantService {
         return switch (verificationMedium) {
             case EMAIL -> processVerification(identifier, verificationCode, tenantRepository::findByEmail);
             case PHONE_NUMBER -> processVerification(identifier, verificationCode, tenantRepository::findByPhoneNumber);
-            default -> false;
         };
     }
 
@@ -109,10 +113,16 @@ public class TenantService {
 
             if (verificationData.getVerificationCode().equals(verificationCode)) {
                 verificationService.deleteVerificationData(existingTenant.getId());
+                existingTenant.setUserStatus(UserStatus.ACTIVE);
+                tenantRepository.save(existingTenant);
                 return true;
             }
         }
 
         return false;
+    }
+
+    public Long countTenants() {
+        return tenantRepository.count();
     }
 }

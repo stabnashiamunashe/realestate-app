@@ -26,6 +26,11 @@ public class PropertyOwnerController {
 
     }
 
+    @PostMapping("/count")
+    public Long countPropertyOwners() {
+        return propertyOwnerService.countPropertyOwners();
+    }
+
     @PostMapping("/update")
     public ResponseEntity<PropertyOwner> updatePropertyOwner(@RequestBody PropertyOwner propertyOwner) {
         PropertyOwner updatedPropertyOwner = propertyOwnerService.updatePropertyOwner(propertyOwner);

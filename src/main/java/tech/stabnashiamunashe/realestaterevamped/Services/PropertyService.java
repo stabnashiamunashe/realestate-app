@@ -10,6 +10,7 @@ import tech.stabnashiamunashe.realestaterevamped.Models.Property;
 import tech.stabnashiamunashe.realestaterevamped.Models.PropertyType;
 import tech.stabnashiamunashe.realestaterevamped.Repos.PropertyRepository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -28,6 +29,7 @@ public class PropertyService {
 
     public PropertyDTO saveProperty(Property property,@Nullable List<MultipartFile> images) {
 
+        property.setDateCreated(LocalDateTime.now());
         if(images != null) {
             List<String> imageUrls = images.stream()
                     .map(s3Service::uploadFile)
@@ -92,5 +94,9 @@ public class PropertyService {
         return properties.stream()
                 .map(PropertyDTO::new)
                 .toList();
+    }
+
+    public Long countProperties() {
+        return propertyRepository.count();
     }
 }

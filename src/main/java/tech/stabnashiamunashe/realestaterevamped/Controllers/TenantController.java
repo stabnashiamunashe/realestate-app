@@ -19,10 +19,8 @@ public class TenantController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<Tenant> createTenant(@RequestBody Tenant tenant,@RequestParam VerificationMedium verificationMedium) throws Exception {
-        Tenant savedTenant = tenantService.createTenant(tenant, verificationMedium);
-        return ResponseEntity.ok(savedTenant);
-
+    public ResponseEntity<?> createTenant(@RequestBody Tenant tenant,@RequestParam VerificationMedium verificationMedium) throws Exception {
+        return tenantService.createTenant(tenant, verificationMedium);
     }
 
     @PostMapping("/verify")
@@ -35,6 +33,11 @@ public class TenantController {
     public ResponseEntity<Tenant> getTenantById(@PathVariable String id) {
         var tenant = tenantService.getTenantById(id);
         return tenant.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    @GetMapping("/count")
+    public ResponseEntity<Long> countTenants() {
+        return ResponseEntity.ok(tenantService.countTenants());
     }
 
     @PutMapping("/update")

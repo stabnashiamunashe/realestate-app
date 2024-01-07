@@ -43,6 +43,11 @@ public class PropertyController {
         return ResponseEntity.ok().build();
     }
 
+    @PostMapping("/count")
+    public Long countProperties() {
+        return propertyService.countProperties();
+    }
+
     @GetMapping("/search")
     public List<PropertyDTO> findProperty(@RequestParam @Nullable Integer bedrooms,
                                           @RequestParam @Nullable Integer bathrooms,

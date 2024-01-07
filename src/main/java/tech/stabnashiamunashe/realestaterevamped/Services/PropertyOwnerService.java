@@ -10,6 +10,7 @@ import tech.stabnashiamunashe.realestaterevamped.Security.Models.UserStatus;
 import tech.stabnashiamunashe.realestaterevamped.Models.VerificationData;
 import tech.stabnashiamunashe.realestaterevamped.Models.VerificationMedium;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
@@ -43,6 +44,7 @@ public class PropertyOwnerService {
 
         propertyOwner.setUserStatus(UserStatus.PENDING);
         propertyOwner.setUserRoles(List.of(UserRoles.LANDLORD));
+        propertyOwner.setDateCreated(LocalDateTime.now());
         propertyOwner.setPassword(passwordEncoder.encode(propertyOwner.getPassword()));
 
         var savedPropertyOwner = propertyOwnerRepository.save(propertyOwner);
@@ -59,9 +61,15 @@ public class PropertyOwnerService {
 
     public PropertyOwner updatePropertyOwner(PropertyOwner propertyOwner) {
         Optional<PropertyOwner> existingPropertyOwner = propertyOwnerRepository.findById(propertyOwner.getId()) ;
-        assert existingPropertyOwner.isPresent();
-        existingPropertyOwner.get().setFirstName(propertyOwner.getFirstName());
-        return propertyOwnerRepository.save(existingPropertyOwner.get());
+        if (existingPropertyOwner.isPresent()) {
+            var existingPropertyOwnerData = existingPropertyOwner.get();
+            existingPropertyOwnerData.setDateUpdated(LocalDateTime.now());
+
+            return propertyOwnerRepository.save(existingPropertyOwnerData);
+        }
+
+        return null;
+
     }
 
     public Optional<PropertyOwner> getPropertyOwnerById(String id) {
@@ -80,7 +88,6 @@ public class PropertyOwnerService {
         return switch (verificationMedium) {
             case EMAIL -> processVerification(identifier, verificationCode, propertyOwnerRepository::findByEmail);
             case PHONE_NUMBER -> processVerification(identifier, verificationCode, propertyOwnerRepository::findByPhoneNumber);
-            default -> false;
         };
     }
 
@@ -103,5 +110,9 @@ public class PropertyOwnerService {
 
     public Optional<PropertyOwner> getPropertyOwnerByEmail(String email) {
         return propertyOwnerRepository.findByEmail(email);
+    }
+
+    public Long countPropertyOwners() {
+        return propertyOwnerRepository.count();
     }
 }
