@@ -2,7 +2,7 @@ package tech.stabnashiamunashe.realestaterevamped.Services;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import software.amazon.awssdk.auth.credentials.ProfileCredentialsProvider;
+import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.s3.S3Client;
 
@@ -18,11 +18,9 @@ public class S3Config {
     @Bean
     public S3Client s3ClientProvider() {
 
-        ProfileCredentialsProvider credentialsProvider = ProfileCredentialsProvider.create();
-
         return S3Client.builder()
                 .region(Region.of(s3Properties.region()))
-                .credentialsProvider(credentialsProvider)
+                .credentialsProvider(() -> AwsBasicCredentials.create(s3Properties.accessKey(), s3Properties.secretKey()))
                 .build();
     }
 }

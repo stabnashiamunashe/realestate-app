@@ -26,14 +26,23 @@ public class User {
 
     @Id
     private String id;
+
     private String username;
+
     private String password;
+
     private String email;
+
     private String phoneNumber;
+
     private String firstName;
+
     private String lastName;
+
     private String role;
+
     private String nationalId;
+
     private String rating;
 
     private LocalDate dateOfBirth;

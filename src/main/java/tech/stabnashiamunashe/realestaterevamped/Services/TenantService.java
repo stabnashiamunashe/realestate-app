@@ -67,11 +67,18 @@ public class TenantService {
     }
 
     public Tenant updateTenant(Tenant tenant) {
-        Tenant existingTenant = tenantRepository.findById(tenant.getId()).orElse(null);
-        assert existingTenant != null;
-        existingTenant.setDateUpdated(LocalDateTime.now());
-        existingTenant.setFirstName(tenant.getFirstName());
-        return tenantRepository.save(existingTenant);
+        Optional<Tenant> existingTenantOptional = tenantRepository.findById(tenant.getId());
+
+        if (existingTenantOptional.isPresent()) {
+            var existingTenant = existingTenantOptional.get();
+            existingTenant.setDateUpdated(LocalDateTime.now());
+            existingTenant.setFirstName(tenant.getFirstName());
+            return tenantRepository.save(existingTenant);
+        }
+
+        return null;
+
+
     }
 
 

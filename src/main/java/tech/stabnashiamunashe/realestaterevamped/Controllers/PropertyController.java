@@ -3,6 +3,7 @@ package tech.stabnashiamunashe.realestaterevamped.Controllers;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.lang.Nullable;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import tech.stabnashiamunashe.realestaterevamped.Models.City;
@@ -12,6 +13,7 @@ import tech.stabnashiamunashe.realestaterevamped.Models.Property;
 import tech.stabnashiamunashe.realestaterevamped.Models.PropertyType;
 import tech.stabnashiamunashe.realestaterevamped.Services.PropertyService;
 
+import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
 
@@ -25,15 +27,18 @@ public class PropertyController {
         this.propertyService = propertyService;
     }
 
+    @PreAuthorize("hasAnyAuthority('SCOPE_OWNER','SCOPE_ADMIN','SCOPE_AGENT')")
     @PostMapping
     public ResponseEntity<PropertyDTO> createProperty(
-            @RequestParam("property") Property property,
-            @RequestParam("images") @Nullable List<MultipartFile> images
+            @ModelAttribute("property") Property property,
+            @RequestParam("images") @Nullable List<MultipartFile> images,
+            Principal principal
     ) {
-        PropertyDTO savedProperty = propertyService.saveProperty(property, images);
+        PropertyDTO savedProperty = propertyService.saveProperty(property, images, principal.getName());
         return new ResponseEntity<>(savedProperty, HttpStatus.CREATED);
     }
 
+    @PreAuthorize("hasAnyAuthority('SCOPE_OWNER','SCOPE_ADMIN','SCOPE_AGENT')")
     @PostMapping("/{propertyId}/ownership-documents")
     public ResponseEntity<PropertyDTO> addOwnershipDocuments(
             @PathVariable String propertyId,
@@ -43,6 +48,7 @@ public class PropertyController {
         return ResponseEntity.ok().build();
     }
 
+    @PreAuthorize("hasAnyAuthority('SCOPE_OWNER','SCOPE_ADMIN','SCOPE_AGENT')")
     @PostMapping("/count")
     public Long countProperties() {
         return propertyService.countProperties();

@@ -21,15 +21,19 @@ public class PropertyService {
 
     private final S3Service s3Service;
 
-    public PropertyService(PropertyRepository propertyRepository, S3Service s3Service) {
+    private final PropertyOwnerService propertyOwnerService;
+
+    public PropertyService(PropertyRepository propertyRepository, S3Service s3Service, PropertyOwnerService propertyOwnerService) {
         this.propertyRepository = propertyRepository;
         this.s3Service = s3Service;
+        this.propertyOwnerService = propertyOwnerService;
     }
 
 
-    public PropertyDTO saveProperty(Property property,@Nullable List<MultipartFile> images) {
+    public PropertyDTO saveProperty(Property property,@Nullable List<MultipartFile> images, String propertyOwnerEmail) {
 
         property.setDateCreated(LocalDateTime.now());
+        property.setPropertyOwner(propertyOwnerService.getPropertyOwnerByEmail(propertyOwnerEmail).orElse(null));
         if(images != null) {
             List<String> imageUrls = images.stream()
                     .map(s3Service::uploadFile)

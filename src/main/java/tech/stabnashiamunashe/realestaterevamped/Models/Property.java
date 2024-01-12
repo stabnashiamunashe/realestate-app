@@ -15,7 +15,6 @@ import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 

@@ -33,14 +33,8 @@ public class S3Service {
                     .value("This is tag 1")
                     .build();
 
-            Tag tag2 = Tag.builder()
-                    .key("Tag 2")
-                    .value("This is tag 2")
-                    .build();
-
             List<Tag> tags = new ArrayList<>();
             tags.add(tag1);
-            tags.add(tag2);
 
             Tagging allTags = Tagging.builder()
                     .tagSet(tags)
@@ -52,7 +46,7 @@ public class S3Service {
             PutObjectRequest putOb = PutObjectRequest.builder()
                     .bucket(s3Properties.bucketName())
                     .key(objectKey)
-                    .tagging(allTags)
+//                    .tagging(allTags)
                     .metadata(metadata)
                     .build();
 
