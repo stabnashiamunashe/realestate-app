@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Property Endpoint</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 10px;
+        }
+
+        button {
+            padding: 10px;
+            background-color: #4caf50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        .property-feature-checkbox {
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body>
+<h2>Create Property</h2>
+<form id="propertyForm">
+    <label for="area">Area:</label>
+    <input type="text" id="area" name="area" required>
+
+    <label for="address">Address:</label>
+    <input type="text" id="address" name="address" required>
+
+    <label for="bedrooms">Bedrooms:</label>
+    <input type="text" id="bedrooms" name="bedrooms" required>
+
+    <label for="bathrooms">Bathrooms:</label>
+    <input type="text" id="bathrooms" name="bathrooms" required>
+
+    <label for="price">Price:</label>
+    <input type="text" id="price" name="price" required>
+
+    <label for="propertyType">Property Type:</label>
+    <input type="text" id="propertyType" name="propertyType" required>
+
+    <label for="propertyCondition">Property Condition:</label>
+    <input type="text" id="propertyCondition" name="propertyCondition" required>
+
+
+    <label for="description">Description:</label>
+    <input type="text" id="description" name="description" required>
+
+    <h3>Property Features</h3>
+    <div>
+        <label>
+            <input type="checkbox" class="property-feature-checkbox" name="hasBorehole">
+            Has Borehole
+        </label>
+
+        <label>
+            <input type="checkbox" class="property-feature-checkbox" name="hasInternetConnection">
+            Has Internet Connection
+        </label>
+
+        <label>
+            <input type="checkbox" class="property-feature-checkbox" name="allowedPets">
+            Are Pets Allowed
+        </label>
+
+        <label>
+            <input type="checkbox" class="property-feature-checkbox" name="hasElectricFence">
+            Has Electric Fence
+        </label>
+
+        <label>
+            <input type="checkbox" class="property-feature-checkbox" name="hasElectricGate">
+            Has Electric Gate
+        </label>
+
+        <label>
+            <input type="checkbox" class="property-feature-checkbox" name="hasLandscapedGarden">
+            Has Landscaped Garden
+        </label>
+
+        <label>
+            <input type="checkbox" class="property-feature-checkbox" name="hasSwimmingPool">
+            Has Swimming Pool
+        </label>
+
+        <label>
+            <input type="checkbox" class="property-feature-checkbox" name="hasVeranda">
+            Has Veranda
+        </label>
+
+        <label>
+            <input type="checkbox" class="property-feature-checkbox" name="isWalledOrFenced">
+            Is Walled or Fenced
+        </label>
+
+        <label>
+            <input type="checkbox" class="property-feature-checkbox" name="hasFittedKitchen">
+            Has Fitted Kitchen
+        </label>
+
+        <label>
+            <input type="checkbox" class="property-feature-checkbox" name="hasFirePlace">
+            has Fire Place
+        </label>
+
+        <label>
+            <input type="checkbox" class="property-feature-checkbox" name="hasBuiltInCupboards">
+            Has Built In Cupboards
+        </label>
+
+        <label>
+            <input type="checkbox" class="property-feature-checkbox" name="hasZesa">
+            Has Zesa
+        </label>
+
+        <label>
+            <input type="checkbox" class="property-feature-checkbox" name="hasSolarGeyser">
+            Has Solar Geyser
+        </label>
+
+        <label>
+            <input type="checkbox" class="property-feature-checkbox" name="isTiled">
+            is Tiled
+        </label>
+
+        <label>
+            <input type="checkbox" class="property-feature-checkbox" name="hasAlarmSystem">
+            Has Alarm System
+        </label>
+
+        <label>
+            <input type="checkbox" class="property-feature-checkbox" name="hasWaterTanks">
+            Has Water Tanks
+        </label>
+
+        <!-- Add other checkboxes for property features -->
+    </div>
+
+    <label for="images">Upload Images:</label>
+    <input type="file" id="images" name="images" multiple accept="image/*">
+
+    <button type="button" onclick="submitProperty()">Submit</button>
+</form>
+
+<script>
+    function submitProperty() {
+        const propertyData = {
+            area: document.getElementById('area').value,
+            address: document.getElementById('address').value,
+            bedrooms: parseInt(document.getElementById('bedrooms').value),
+            bathrooms: parseInt(document.getElementById('bathrooms').value),
+            price: parseInt(document.getElementById('price').value),
+            description: document.getElementById('description').value,
+            propertyType: document.getElementById('propertyType').value,
+            propertyCondition: document.getElementById('propertyCondition').value,
+            location: {
+                id: "659a454aa83d6c22042fc8f3"
+            },
+
+            propertyFeatures: {
+                hasBorehole: document.querySelector('[name="hasBorehole"]').checked,
+                hasInternetConnection: document.querySelector('[name="hasInternetConnection"]').checked,
+                allowedPets: document.querySelector('[name="allowedPets"]').checked,
+                hasElectricFence: document.querySelector('[name="hasElectricFence"]').checked,
+                hasElectricGate: document.querySelector('[name="hasElectricGate"]').checked,
+                hasLandscapedGarden: document.querySelector('[name="hasLandscapedGarden"]').checked,
+                hasSwimmingPool: document.querySelector('[name="hasSwimmingPool"]').checked,
+                hasVeranda: document.querySelector('[name="hasVeranda"]').checked,
+                hasZesa: document.querySelector('[name="hasZesa"]').checked,
+                isWalledOrFenced: document.querySelector('[name="isWalledOrFenced"]').checked,
+                hasFirePlace: document.querySelector('[name="hasFirePlace"]').checked,
+                hasFittedKitchen: document.querySelector('[name="hasFittedKitchen"]').checked,
+                hasBuiltInCupboards: document.querySelector('[name="hasBuiltInCupboards"]').checked,
+                hasSolarGeyser: document.querySelector('[name="hasSolarGeyser"]').checked,
+                isTiled: document.querySelector('[name="isTiled"]').checked,
+                hasAlarmSystem: document.querySelector('[name="hasAlarmSystem"]').checked,
+                hasWaterTanks: document.querySelector('[name="hasWaterTanks"]').checked,
+            },
+        };
+
+
+        const propertyForm = document.getElementById('propertyForm');
+        const formData = new FormData(propertyForm);
+
+        // Append propertyData to formData
+        formData.append('property', JSON.stringify(propertyData));
+
+        const imagesInput = document.getElementById('images');
+        const images = imagesInput.files;
+
+        for (let i = 0; i < images.length; i++) {
+            formData.append('images', images[i]);
+        }
+
+        fetch('http://localhost:8080/api/properties', {
+            method: 'POST',
+            body: formData,
+            headers: {
+                "Authorization" : "Bearer " + localStorage.getItem("token")
+            }
+        })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Property created:', data);
+                alert('Property created successfully!');
+            })
+            .catch(error => {
+                console.error('Error creating property:', error);
+                alert('Error creating property. Please check the console for details.');
+            });
+    }
+</script>
+</body>
+</html>
