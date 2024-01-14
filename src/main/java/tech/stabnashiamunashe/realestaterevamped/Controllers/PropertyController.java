@@ -1,5 +1,9 @@
 package tech.stabnashiamunashe.realestaterevamped.Controllers;
 
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.lang.Nullable;
@@ -27,6 +31,7 @@ public class PropertyController {
         this.propertyService = propertyService;
     }
 
+    @CacheEvict(value = "propertyCountCache", allEntries = true)
     @PreAuthorize("hasAnyAuthority('SCOPE_OWNER','SCOPE_ADMIN','SCOPE_AGENT')")
     @PostMapping
     public ResponseEntity<PropertyDTO> createProperty(
@@ -34,11 +39,12 @@ public class PropertyController {
             @RequestParam("images") @Nullable List<MultipartFile> images,
             Principal principal
     ) {
+
         PropertyDTO savedProperty = propertyService.saveProperty(property, images, principal.getName());
         return new ResponseEntity<>(savedProperty, HttpStatus.CREATED);
     }
 
-    @PreAuthorize("hasAnyAuthority('SCOPE_OWNER','SCOPE_ADMIN','SCOPE_AGENT')")
+    @PreAuthorize("hasAnyAuthority('SCOPE_OWNER','SCOPE_ADMIN','SCOPE_AGENT', 'SCOPE_TENANT')")
     @PostMapping("/{propertyId}/ownership-documents")
     public ResponseEntity<PropertyDTO> addOwnershipDocuments(
             @PathVariable String propertyId,
@@ -48,6 +54,25 @@ public class PropertyController {
         return ResponseEntity.ok().build();
     }
 
+    @PreAuthorize("hasAnyAuthority('SCOPE_LANDLORD','SCOPE_TENANT','SCOPE_ADMIN')")
+    @GetMapping()
+    public ResponseEntity<Page<PropertyDTO>> getPagedProperties(
+            @RequestParam(defaultValue = "10") int pageSize,
+            @RequestParam(defaultValue = "0") int pageNumber,
+            @RequestParam(defaultValue = "0") int offset
+    ) {
+        PageRequest pageRequest = PageRequest.of(pageNumber, pageSize);
+        Page<PropertyDTO> pagedProperties = propertyService.getPagedProperties(pageRequest, offset);
+        return ResponseEntity.ok(pagedProperties);
+    }
+
+    @PreAuthorize("hasAuthority('SCOPE_LANDLORD')")
+    @GetMapping("/owner")
+    public List<Property> getPropertyForOwner(Principal principal) {
+        return propertyService.getPropertiesForLoggedInOwner(principal.getName());
+    }
+
+    @Cacheable("propertyCountCache")
     @PreAuthorize("hasAnyAuthority('SCOPE_OWNER','SCOPE_ADMIN','SCOPE_AGENT')")
     @PostMapping("/count")
     public Long countProperties() {
@@ -90,7 +115,4 @@ public class PropertyController {
         List<PropertyDTO> properties = propertyService.getPropertiesByIds(propertyIds);
         return ResponseEntity.ok(properties);
     }
-
-
-
 }

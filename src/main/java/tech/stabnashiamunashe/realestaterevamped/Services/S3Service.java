@@ -52,7 +52,7 @@ public class S3Service {
 
             s3.putObject(putOb, RequestBody.fromFile(convertMultiPartFileToFile(multipartFile)));
 
-            return "https://" + s3Properties.bucketName() + ".s3.amazonaws.com/" + objectKey;
+            return "https://" + s3Properties.bucketName() + ".s3." + s3Properties.region() + "amazonaws.com/" + objectKey;
 
         } catch (S3Exception e) {
             log.error("Error uploading file to S3", e);

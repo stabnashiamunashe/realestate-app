@@ -1,6 +1,9 @@
 package tech.stabnashiamunashe.realestaterevamped.Services;
 
 import jakarta.annotation.Nullable;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import tech.stabnashiamunashe.realestaterevamped.Models.City;
@@ -13,6 +16,7 @@ import tech.stabnashiamunashe.realestaterevamped.Repos.PropertyRepository;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class PropertyService {
@@ -102,5 +106,19 @@ public class PropertyService {
 
     public Long countProperties() {
         return propertyRepository.count();
+    }
+
+    public Page<PropertyDTO> getPagedProperties(PageRequest pageRequest, int offset) {
+        Page<Property> propertiesPage = propertyRepository.findAll(pageRequest);
+        List<PropertyDTO> propertyDTOs = propertiesPage.stream()
+                .skip(offset)
+                .map(PropertyDTO::new)
+                .collect(Collectors.toList());
+
+        return new PageImpl<>(propertyDTOs, pageRequest, propertiesPage.getTotalElements());
+    }
+
+    public List<Property> getPropertiesForLoggedInOwner(String email) {
+        return propertyRepository.findByPropertyOwner_Email(email);
     }
 }

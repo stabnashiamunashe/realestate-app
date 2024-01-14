@@ -1,5 +1,6 @@
 package tech.stabnashiamunashe.realestaterevamped.Security.Service;
 
+import org.springframework.transaction.annotation.Transactional;
 import tech.stabnashiamunashe.realestaterevamped.Security.Models.SecurityUser;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -8,6 +9,7 @@ import org.springframework.stereotype.Service;
 import tech.stabnashiamunashe.realestaterevamped.Security.Repositories.UserRepository;
 
 @Service
+@Transactional
 public class MyUserDetailsService implements UserDetailsService {
 
     private final UserRepository userRepository;

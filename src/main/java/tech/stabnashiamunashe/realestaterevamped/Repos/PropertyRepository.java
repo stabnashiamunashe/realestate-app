@@ -29,4 +29,6 @@ public interface PropertyRepository extends MongoRepository<Property, String> {
                                         String location,
                                         Double minPrice,
                                         Double maxPrice);
+
+    List<Property> findByPropertyOwner_Email(String email);
 }

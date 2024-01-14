@@ -199,6 +199,7 @@
         const formData = new FormData(propertyForm);
 
         // Append propertyData to formData
+        console.log('propertyData', propertyData);
         formData.append('property', JSON.stringify(propertyData));
 
         const imagesInput = document.getElementById('images');
