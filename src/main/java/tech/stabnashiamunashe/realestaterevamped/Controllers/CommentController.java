@@ -1,6 +1,7 @@
 package tech.stabnashiamunashe.realestaterevamped.Controllers;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import tech.stabnashiamunashe.realestaterevamped.Models.Comment;
 import tech.stabnashiamunashe.realestaterevamped.Services.CommentService;
@@ -18,8 +19,8 @@ public class CommentController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<Comment> createComment(@RequestBody Comment comment ) {
-        Comment savedComment = commentService.craeteComment(comment);
+    public ResponseEntity<Comment> createComment(@RequestBody Comment comment, Authentication authentication) {
+        Comment savedComment = commentService.createComment(comment, authentication);
         return new ResponseEntity<>(savedComment, org.springframework.http.HttpStatus.CREATED);
     }
 
@@ -30,8 +31,8 @@ public class CommentController {
     }
 
     @PutMapping("/update")
-    public ResponseEntity<Comment> updateComment(@RequestBody Comment comment) {
-        Comment updatedComment = commentService.updateComment(comment);
+    public ResponseEntity<Comment> updateComment(@RequestBody Comment comment, Authentication authentication) {
+        Comment updatedComment = commentService.updateComment(comment, authentication);
         return ResponseEntity.ok(updatedComment);
     }
 
@@ -47,6 +48,13 @@ public class CommentController {
         List<Comment> comments = commentService.getAllComments();
         return ResponseEntity.ok(comments);
     }
+
+    @GetMapping("/all")
+    public ResponseEntity<List<Comment>> getAllCommentsForLoggedInUser(Authentication authentication) {
+        List<Comment> comments = commentService.getAllCommentsForUser(authentication.getName());
+        return ResponseEntity.ok(comments);
+    }
+
 
 
 }

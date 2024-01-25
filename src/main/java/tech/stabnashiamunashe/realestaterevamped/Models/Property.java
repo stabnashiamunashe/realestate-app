@@ -2,6 +2,7 @@ package tech.stabnashiamunashe.realestaterevamped.Models;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -76,7 +77,7 @@ public class Property {
     @DBRef
     private List<String> ownershipDocumentsUrls;
 
-    @DBRef
+    @DBRef(lazy = true)
     private List<Comment> comments;
 
     @DBRef
